@@ -1,0 +1,15 @@
+name: MaSuitePortalsBridge
+version: ${project.version}
+main: fi.matiaspaavilainen.masuiteportalsbridge.MaSuitePortalsBridge
+depend: [WorldEdit]
+authors: [Masa]
+commands:
+  setportal:
+    description: Sets portal
+    aliases: [createportal, portalset]
+  delportal:
+    description: Deletes portal
+    aliases: [deleteportal, portaldel]
+  portals:
+    description: List all available portals
+    aliases: [portalslist, listportals]
