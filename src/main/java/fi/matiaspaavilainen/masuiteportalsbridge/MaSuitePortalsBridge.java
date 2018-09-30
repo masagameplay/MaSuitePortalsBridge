@@ -30,7 +30,7 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PortalsMessageListener(this));
 
-        getServer().getPluginManager().registerEvents(new MovementListener(), this);
+        getServer().getPluginManager().registerEvents(new MovementListener(this), this);
     }
 
     @Override
