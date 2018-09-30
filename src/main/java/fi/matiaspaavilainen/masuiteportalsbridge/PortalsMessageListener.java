@@ -4,6 +4,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 public class PortalsMessageListener implements PluginMessageListener {
+
+    private MaSuitePortalsBridge plugin;
+    public PortalsMessageListener(MaSuitePortalsBridge p){
+        plugin = p;
+    }
+
     /**
      * A method that will be thrown when a PluginMessageSource sends a plugin
      * message on a registered channel.
