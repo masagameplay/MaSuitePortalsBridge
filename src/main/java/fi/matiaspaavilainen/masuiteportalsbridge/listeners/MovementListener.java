@@ -27,8 +27,8 @@ public class MovementListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
-        Location corner1 = new Location(Bukkit.getWorld("world"), -2, 99, 25);
-        Location corner2 = new Location(Bukkit.getWorld("world"), 3, 101, 25);
+        Location corner1 = new Location(p.getWorld(), -2, 102, 27);
+        Location corner2 = new Location(p.getWorld(), 3, 99, 26);
         if (e.getFrom().getBlockX() != e.getTo().getBlockX() || e.getFrom().getBlockY() != e.getTo().getBlockY() || e.getFrom().getBlockZ() != e.getTo().getBlockZ()) {
             PortalRegion pr = new PortalRegion(corner1, corner2);
             if (pr.isInPortal(p.getLocation())) {
@@ -45,7 +45,7 @@ public class MovementListener implements Listener {
                         ex.getStackTrace();
                     }
                 } else {
-                    if ((System.currentTimeMillis() - inPortal.get(p.getUniqueId())) / 1000 > 3) {
+                       if ((System.currentTimeMillis() - inPortal.get(p.getUniqueId())) / 1000 > 3) {
                         inPortal.remove(p.getUniqueId());
                     }
                 }
