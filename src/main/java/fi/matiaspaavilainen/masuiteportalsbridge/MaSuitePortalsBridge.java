@@ -1,16 +1,19 @@
 package fi.matiaspaavilainen.masuiteportalsbridge;
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import fi.matiaspaavilainen.masuiteportalsbridge.commands.Delete;
 import fi.matiaspaavilainen.masuiteportalsbridge.commands.List;
 import fi.matiaspaavilainen.masuiteportalsbridge.commands.Set;
 import fi.matiaspaavilainen.masuiteportalsbridge.listeners.MovementListener;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MaSuitePortalsBridge extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if(getServer().getPluginManager().getPlugin("WorldEdit") == null){
+        WorldEditPlugin we = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
+        if(we == null){
             System.out.println("[MaSuitePortals] WorldEdit not detected. Disabling...");
             getServer().getPluginManager().disablePlugin(this);
         }

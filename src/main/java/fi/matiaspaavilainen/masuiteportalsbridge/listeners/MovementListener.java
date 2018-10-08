@@ -27,11 +27,11 @@ public class MovementListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
-        Location corner1 = new Location(p.getWorld(), -2, 102, 27);
-        Location corner2 = new Location(p.getWorld(), 3, 99, 26);
+        Location corner1 = new Location(p.getWorld(), -2, 102, 26);
+        Location corner2 = new Location(p.getWorld(), 3, 99, 25);
         if (e.getFrom().getBlockX() != e.getTo().getBlockX() || e.getFrom().getBlockY() != e.getTo().getBlockY() || e.getFrom().getBlockZ() != e.getTo().getBlockZ()) {
             PortalRegion pr = new PortalRegion(corner1, corner2);
-            if (pr.isInPortal(p.getLocation())) {
+            if (pr.isIn(p.getLocation())) {
                 if (!inPortal.containsKey(p.getUniqueId())) {
                     inPortal.put(p.getUniqueId(), System.currentTimeMillis());
                     e.setCancelled(true);
