@@ -10,9 +10,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MaSuitePortalsBridge extends JavaPlugin {
 
+    public WorldEditPlugin we = null;
     @Override
     public void onEnable() {
-        WorldEditPlugin we = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
+        we = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
         if(we == null){
             System.out.println("[MaSuitePortals] WorldEdit not detected. Disabling...");
             getServer().getPluginManager().disablePlugin(this);
