@@ -6,7 +6,11 @@ import fi.matiaspaavilainen.masuiteportalsbridge.commands.List;
 import fi.matiaspaavilainen.masuiteportalsbridge.commands.Set;
 import fi.matiaspaavilainen.masuiteportalsbridge.listeners.MovementListener;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
 
 public final class MaSuitePortalsBridge extends JavaPlugin {
 
@@ -21,6 +25,8 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
 
         registerCommands();
         registerListener();
+
+        getPortals();
 
     }
 
@@ -37,6 +43,11 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MovementListener(this), this);
     }
 
+    private void getPortals(){
+        World world = getServer().getWorld("world");
+        PortalManager.portals.put(world, new ArrayList<>());
+        PortalManager.portals.get(getServer().getWorld("world")).add(new Portal("test", new Location(world, -2, 102, 26), new Location(world, 3, 99, 25), "air"));
+    }
     @Override
     public void onDisable() {
     }

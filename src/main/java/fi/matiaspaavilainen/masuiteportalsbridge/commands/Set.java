@@ -27,7 +27,7 @@ public class Set implements CommandExecutor {
         if (!(sender instanceof Player)) {
             return false;
         }
-        if (args.length < 5) {
+        if (args.length == 4) {
             Player p = (Player) sender;
             BukkitPlayer bp = BukkitAdapter.adapt(p);
             LocalSession localSession = plugin.we.getWorldEdit().getSessionManager().get(BukkitAdapter.adapt(p));
