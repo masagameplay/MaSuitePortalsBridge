@@ -1,27 +1,73 @@
 package fi.matiaspaavilainen.masuiteportalsbridge;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.Arrays;
 
 public class PortalsMessageListener implements PluginMessageListener {
 
     private MaSuitePortalsBridge plugin;
-    public PortalsMessageListener(MaSuitePortalsBridge p){
+
+    public PortalsMessageListener(MaSuitePortalsBridge p) {
         plugin = p;
     }
 
-    /**
-     * A method that will be thrown when a PluginMessageSource sends a plugin
-     * message on a registered channel.
-     *
-     * @param channel Channel that the message was sent through.
-     * @param player  Source of the message.
-     * @param message The raw message that was sent.
-     */
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-        if(!channel.equals("BungeeCord")){
+        if (!channel.equals("BungeeCord")) {
             return;
         }
+        DataInputStream in = new DataInputStream(new ByteArrayInputStream(message));
+        String subchannel = null;
+        try {
+            subchannel = in.readUTF();
+            if (subchannel.equals("MaSuitePortals")) {
+                String childchannel = in.readUTF();
+                if (childchannel.equals("PortalList")) {
+                    System.out.println("Received list of portals");
+                    // Split all portal data to separate portals
+                    String[] p = in.readUTF().toLowerCase().split(";");
+                    System.out.println("All: " + Arrays.toString(p));
+                    // Loop them
+                    for (String po : p) {
+                        // Split all info of portal to strings
+                        String[] portalList = po.split(":");
+                        System.out.println("Portals: " + Arrays.toString(portalList));
+                        Location minLoc = null, maxLoc = null;
+                        for (String locs : portalList) {
+                            String[] loc = locs.split("/");
+                            System.out.println("Locations: " +Arrays.toString(loc));
+                            minLoc = new Location(Bukkit.getWorld(loc[0]), Double.parseDouble(loc[1]), Double.parseDouble(loc[2]), Double.parseDouble(loc[3]));
+                            maxLoc = new Location(Bukkit.getWorld(loc[0]), Double.parseDouble(loc[5]), Double.parseDouble(loc[6]), Double.parseDouble(loc[7]));
+                        }
+
+                        Portal portal = new Portal();
+                        portal.setName(portalList[0]);
+                        portal.setType(portalList[1]);
+                        portal.setDestination(portalList[2]);
+                        portal.setFilltype(portalList[3]);
+                        portal.setMinLoc(minLoc);
+                        portal.setMaxLoc(maxLoc);
+                        // Build location from those
+
+                        assert minLoc != null;
+                        if (minLoc.getWorld() != null) {
+                            PortalManager.portals.get(minLoc.getWorld()).add(portal);
+                        }
+                        PortalManager.loadPortals();
+                    }
+
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

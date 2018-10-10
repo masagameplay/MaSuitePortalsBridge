@@ -3,6 +3,7 @@ version: ${project.version}
 main: fi.matiaspaavilainen.masuiteportalsbridge.MaSuitePortalsBridge
 depend: [WorldEdit]
 authors: [Masa]
+api-version: 1.13
 commands:
   setportal:
     description: Sets portal

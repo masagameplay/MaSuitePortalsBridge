@@ -9,5 +9,7 @@ public class PortalManager {
 
     public static HashMap<World, List<Portal>> portals = new HashMap<>();
 
-
+    public static void loadPortals(){
+        PortalManager.portals.forEach((world, portals) -> portals.forEach(Portal::fillPortal));
+    }
 }

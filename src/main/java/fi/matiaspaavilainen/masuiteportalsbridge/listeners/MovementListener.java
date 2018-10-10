@@ -51,7 +51,7 @@ public class MovementListener implements Listener {
                     out.writeUTF("SendPlayer");
                     out.writeUTF(p.getName());
                     out.writeUTF(portal.getName());
-                    Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+                    // Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
                 } catch (Exception ex) {
                     ex.getStackTrace();
                 }
