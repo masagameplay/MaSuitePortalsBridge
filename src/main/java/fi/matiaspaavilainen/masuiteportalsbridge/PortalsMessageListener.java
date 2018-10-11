@@ -29,23 +29,20 @@ public class PortalsMessageListener implements PluginMessageListener {
             subchannel = in.readUTF();
             if (subchannel.equals("MaSuitePortals")) {
                 String childchannel = in.readUTF();
+                System.out.println(in.readUTF());
                 if (childchannel.equals("PortalList")) {
                     System.out.println("Received list of portals");
                     // Split all portal data to separate portals
-                    String[] p = in.readUTF().toLowerCase().split(";");
-                    System.out.println("All: " + Arrays.toString(p));
+                    String[] p = in.readUTF().toLowerCase().split("|");
+                    //System.out.println("All: " + Arrays.toString(p));
                     // Loop them
                     for (String po : p) {
                         // Split all info of portal to strings
                         String[] portalList = po.split(":");
                         System.out.println("Portals: " + Arrays.toString(portalList));
-                        Location minLoc = null, maxLoc = null;
-                        for (String locs : portalList) {
-                            String[] loc = locs.split("/");
-                            System.out.println("Locations: " +Arrays.toString(loc));
-                            minLoc = new Location(Bukkit.getWorld(loc[0]), Double.parseDouble(loc[1]), Double.parseDouble(loc[2]), Double.parseDouble(loc[3]));
-                            maxLoc = new Location(Bukkit.getWorld(loc[0]), Double.parseDouble(loc[5]), Double.parseDouble(loc[6]), Double.parseDouble(loc[7]));
-                        }
+                        Location minLoc, maxLoc;
+                        minLoc = new Location(Bukkit.getWorld(portalList[4]), Double.parseDouble(portalList[5]), Double.parseDouble(portalList[6]), Double.parseDouble(portalList[7]));
+                        maxLoc = new Location(Bukkit.getWorld(portalList[4]), Double.parseDouble(portalList[8]), Double.parseDouble(portalList[9]), Double.parseDouble(portalList[10]));
 
                         Portal portal = new Portal();
                         portal.setName(portalList[0]);
@@ -56,18 +53,16 @@ public class PortalsMessageListener implements PluginMessageListener {
                         portal.setMaxLoc(maxLoc);
                         // Build location from those
 
-                        assert minLoc != null;
                         if (minLoc.getWorld() != null) {
                             PortalManager.portals.get(minLoc.getWorld()).add(portal);
                         }
-                        PortalManager.loadPortals();
                     }
+                    PortalManager.loadPortals();
 
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
-
     }
 }

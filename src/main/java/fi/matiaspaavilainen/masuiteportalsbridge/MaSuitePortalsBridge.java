@@ -9,7 +9,11 @@ import fi.matiaspaavilainen.masuiteportalsbridge.commands.Set;
 import fi.matiaspaavilainen.masuiteportalsbridge.listeners.MovementListener;
 import fi.matiaspaavilainen.masuiteportalsbridge.listeners.PhysicsListener;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
 
 public final class MaSuitePortalsBridge extends JavaPlugin {
 
@@ -24,8 +28,12 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
 
         registerCommands();
         registerListener();
-        reguestPortals();
+        //reguestPortals();
 
+        World world = getServer().getWorld("world");
+        PortalManager.portals.put(world, new ArrayList<>());
+        PortalManager.portals.get(getServer().getWorld("world")).add(new Portal("test", "warp", "isoportaali", new Location(world, 6, 103, 22), new Location(world, 8, 98, 22), "water"));
+        PortalManager.loadPortals();
     }
 
     @Override
@@ -48,7 +56,7 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
 
     private void registerListener(){
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PortalsMessageListener(this));
+        //getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PortalsMessageListener(this));
 
         getServer().getPluginManager().registerEvents(new MovementListener(this), this);
         getServer().getPluginManager().registerEvents(new PhysicsListener(), this);

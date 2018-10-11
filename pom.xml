@@ -56,6 +56,10 @@
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>sk89q-snapshots</id>
             <url>http://maven.sk89q.com/artifactory/repo/</url>
             <releases>

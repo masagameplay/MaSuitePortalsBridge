@@ -1,8 +1,12 @@
 package fi.matiaspaavilainen.masuiteportalsbridge;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.entity.Player;
 
 public class Portal {
 
@@ -14,7 +18,7 @@ public class Portal {
 
     public Portal(){}
 
-    public Portal(String name, String destination, String type, Location minLoc, Location maxLoc, String filltype) {
+    public Portal(String name, String type, String destination, Location minLoc, Location maxLoc, String filltype) {
         this.name = name;
         this.type = type;
         this.destination = destination;
@@ -24,6 +28,27 @@ public class Portal {
     }
 
 
+    public void send(Player p, MaSuitePortalsBridge plugin){
+        if(getType().equals("server")){
+            try {
+                ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                out.writeUTF("ConnectOther");
+                out.writeUTF(p.getName());
+                out.writeUTF(getDestination());
+                Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+            } catch (Exception ex) {
+                ex.getStackTrace();
+            }
+        } else if(getType().equals("warp")) {
+            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+            out.writeUTF("WarpPlayerCommand");
+            out.writeUTF(p.getName());
+            out.writeUTF("console");
+            out.writeUTF(getDestination());
+
+            Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+        }
+    }
     public void fillPortal() {
         PortalRegion pr = new PortalRegion(getMinLoc(), getMaxLoc());
         pr.blockList().forEach(block -> {
@@ -31,7 +56,7 @@ public class Portal {
                 if (block.getType().equals(Material.AIR)) {
                     block.setType(Material.WATER);
                     Levelled levelledData = (Levelled) block.getState().getBlockData();
-                    levelledData.setLevel(6);
+                    levelledData.setLevel(10);
                     block.getState().setBlockData(levelledData);
                 }
             }
