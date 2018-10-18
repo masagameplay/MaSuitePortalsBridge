@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 public class PortalsMessageListener implements PluginMessageListener {
 
@@ -29,36 +30,26 @@ public class PortalsMessageListener implements PluginMessageListener {
             subchannel = in.readUTF();
             if (subchannel.equals("MaSuitePortals")) {
                 String childchannel = in.readUTF();
-                System.out.println(in.readUTF());
-                if (childchannel.equals("PortalList")) {
-                    System.out.println("Received list of portals");
-                    // Split all portal data to separate portals
-                    String[] p = in.readUTF().toLowerCase().split("|");
-                    //System.out.println("All: " + Arrays.toString(p));
-                    // Loop them
-                    for (String po : p) {
-                        // Split all info of portal to strings
-                        String[] portalList = po.split(":");
-                        System.out.println("Portals: " + Arrays.toString(portalList));
-                        Location minLoc, maxLoc;
-                        minLoc = new Location(Bukkit.getWorld(portalList[4]), Double.parseDouble(portalList[5]), Double.parseDouble(portalList[6]), Double.parseDouble(portalList[7]));
-                        maxLoc = new Location(Bukkit.getWorld(portalList[4]), Double.parseDouble(portalList[8]), Double.parseDouble(portalList[9]), Double.parseDouble(portalList[10]));
-
-                        Portal portal = new Portal();
-                        portal.setName(portalList[0]);
-                        portal.setType(portalList[1]);
-                        portal.setDestination(portalList[2]);
-                        portal.setFilltype(portalList[3]);
-                        portal.setMinLoc(minLoc);
-                        portal.setMaxLoc(maxLoc);
-                        // Build location from those
-
-                        if (minLoc.getWorld() != null) {
-                            PortalManager.portals.get(minLoc.getWorld()).add(portal);
+                if (childchannel.equals("CreatePortal")) {
+                    String[] p = in.readUTF().toLowerCase().split(":");
+                    Portal portal = new Portal();
+                    portal.setName(p[0]);
+                    portal.setType(p[1]);
+                    portal.setDestination(p[2]);
+                    portal.setFillType(p[3]);
+                    portal.setMinLoc(new Location(Bukkit.getWorld(p[4]), Double.parseDouble(p[5]), Double.parseDouble(p[6]), Double.parseDouble(p[7])));
+                    portal.setMaxLoc(new Location(Bukkit.getWorld(p[4]), Double.parseDouble(p[8]), Double.parseDouble(p[9]), Double.parseDouble(p[10])));
+                    if (Bukkit.getWorld(p[4]) != null) {
+                        if (PortalManager.portalNames.contains(portal.getName())) {
+                            return;
                         }
+                        PortalManager.portals.get(Bukkit.getWorld(p[4])).add(portal);
+                        PortalManager.loadPortals();
+                        PortalManager.portalNames.add(portal.getName());
+                        System.out.println(PortalManager.portals.get(Bukkit.getWorld(p[4])));
+                    } else {
+                        System.out.println("World not found");
                     }
-                    PortalManager.loadPortals();
-
                 }
             }
         } catch (IOException e1) {

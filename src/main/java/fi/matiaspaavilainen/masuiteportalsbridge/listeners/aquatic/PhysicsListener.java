@@ -3,7 +3,7 @@
  * Updated version for MaSuite: Masa
  */
 
-package fi.matiaspaavilainen.masuiteportalsbridge.listeners;
+package fi.matiaspaavilainen.masuiteportalsbridge.listeners.aquatic;
 
 import fi.matiaspaavilainen.masuiteportalsbridge.Portal;
 import fi.matiaspaavilainen.masuiteportalsbridge.PortalManager;

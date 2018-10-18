@@ -14,22 +14,23 @@ public class Portal {
     private String type;
     private String destination;
     private Location minLoc, maxLoc;
-    private String filltype;
+    private String fillType;
 
-    public Portal(){}
+    public Portal() {
+    }
 
-    public Portal(String name, String type, String destination, Location minLoc, Location maxLoc, String filltype) {
+    public Portal(String name, String type, String destination, Location minLoc, Location maxLoc, String fillType) {
         this.name = name;
         this.type = type;
         this.destination = destination;
         this.minLoc = minLoc;
         this.maxLoc = maxLoc;
-        this.filltype = filltype;
+        this.fillType = fillType;
     }
 
 
-    public void send(Player p, MaSuitePortalsBridge plugin){
-        if(getType().equals("server")){
+    public void send(Player p, MaSuitePortalsBridge plugin) {
+        if (getType().equals("server")) {
             try {
                 ByteArrayDataOutput out = ByteStreams.newDataOutput();
                 out.writeUTF("ConnectOther");
@@ -39,7 +40,7 @@ public class Portal {
             } catch (Exception ex) {
                 ex.getStackTrace();
             }
-        } else if(getType().equals("warp")) {
+        } else if (getType().equals("warp")) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("WarpPlayerCommand");
             out.writeUTF(p.getName());
@@ -49,10 +50,12 @@ public class Portal {
             Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
         }
     }
+
     public void fillPortal() {
+        System.out.println(getFillType());
         PortalRegion pr = new PortalRegion(getMinLoc(), getMaxLoc());
         pr.blockList().forEach(block -> {
-            if (getFilltype().equals("water")) {
+            if (getFillType().equals("water")) {
                 if (block.getType().equals(Material.AIR)) {
                     block.setType(Material.WATER);
                     Levelled levelledData = (Levelled) block.getState().getBlockData();
@@ -72,6 +75,12 @@ public class Portal {
         });
     }
 
+    public String toString() {
+        String minLoc = getMinLoc().getWorld() + ":" + getMinLoc().getX() + ":" + getMinLoc().getY() + ":" + getMinLoc().getZ();
+        String maxLoc = getMaxLoc().getX() + ":" + getMaxLoc().getY() + ":" + getMaxLoc().getZ();
+        return getName() + ":" + getType() + ":" + getDestination() + ":" + getFillType() + ":" + minLoc + ":" + maxLoc;
+    }
+
     public Location getMinLoc() {
         return minLoc;
     }
@@ -88,12 +97,12 @@ public class Portal {
         this.maxLoc = maxLoc;
     }
 
-    public String getFilltype() {
-        return filltype;
+    public String getFillType() {
+        return fillType;
     }
 
-    public void setFilltype(String filltype) {
-        this.filltype = filltype;
+    public void setFillType(String fillType) {
+        this.fillType = fillType;
     }
 
     public String getName() {

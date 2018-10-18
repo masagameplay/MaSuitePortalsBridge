@@ -5,12 +5,8 @@ import com.google.common.io.ByteStreams;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import fi.matiaspaavilainen.masuiteportalsbridge.commands.Delete;
 import fi.matiaspaavilainen.masuiteportalsbridge.commands.List;
-import fi.matiaspaavilainen.masuiteportalsbridge.commands.Set;
 import fi.matiaspaavilainen.masuiteportalsbridge.listeners.MovementListener;
-import fi.matiaspaavilainen.masuiteportalsbridge.listeners.PhysicsListener;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -18,6 +14,9 @@ import java.util.ArrayList;
 public final class MaSuitePortalsBridge extends JavaPlugin {
 
     public WorldEditPlugin we = null;
+
+    private Config config = new Config(this);
+
     @Override
     public void onEnable() {
         we = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
@@ -26,14 +25,14 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
 
+        // Register and load everything
         registerCommands();
         registerListener();
-        //reguestPortals();
+        initLists();
+        reguestPortals();
 
-        World world = getServer().getWorld("world");
-        PortalManager.portals.put(world, new ArrayList<>());
-        PortalManager.portals.get(getServer().getWorld("world")).add(new Portal("test", "warp", "isoportaali", new Location(world, 6, 103, 22), new Location(world, 8, 98, 22), "water"));
-        PortalManager.loadPortals();
+        // Create configs
+        config.createConfigs();
     }
 
     @Override
@@ -46,9 +45,10 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
         // Check if server version
         if(getServer().getVersion().contains("13")){
             // If version is 1.13, use new WE
-            getCommand("setportal").setExecutor(new Set(this));
+            getCommand("setportal").setExecutor(new fi.matiaspaavilainen.masuiteportalsbridge.commands.aquatic.Set(this));
         }else{
             // If version is not 1.13, use old WE
+            getCommand("setportal").setExecutor(new fi.matiaspaavilainen.masuiteportalsbridge.commands.others.Set(this));
         }
         getCommand("delportal").setExecutor(new Delete(this));
         getCommand("portals").setExecutor(new List(this));
@@ -56,19 +56,27 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
 
     private void registerListener(){
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        //getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PortalsMessageListener(this));
+        getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PortalsMessageListener(this));
 
         getServer().getPluginManager().registerEvents(new MovementListener(this), this);
-        getServer().getPluginManager().registerEvents(new PhysicsListener(), this);
+        // Check if server version
+        if(getServer().getVersion().contains("13")){
+            // If version is 1.13, use new WE
+            getServer().getPluginManager().registerEvents(new fi.matiaspaavilainen.masuiteportalsbridge.listeners.aquatic.PhysicsListener(), this);
+        }else{
+            // If version is not 1.13, use old WE
+            getServer().getPluginManager().registerEvents(new fi.matiaspaavilainen.masuiteportalsbridge.listeners.others.PhysicsListener(), this);
+        }
+
     }
 
+    private void initLists(){
+        getServer().getWorlds().forEach(world -> PortalManager.portals.put(world, new ArrayList<Portal>()));
+    }
     private void reguestPortals() {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("MaSuitePortals");
         out.writeUTF("RequestPortals");
-        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
-            System.out.println("[MaSuite] [Portals] Requesting list of portals");
-            getServer().sendPluginMessage(this, "BungeeCord", out.toByteArray());
-        }, 0, 3000);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> getServer().sendPluginMessage(this, "BungeeCord", out.toByteArray()), 0, 30000);
     }
 }
