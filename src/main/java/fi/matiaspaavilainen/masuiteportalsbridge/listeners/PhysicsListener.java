@@ -8,7 +8,6 @@ package fi.matiaspaavilainen.masuiteportalsbridge.listeners;
 import fi.matiaspaavilainen.masuiteportalsbridge.Portal;
 import fi.matiaspaavilainen.masuiteportalsbridge.PortalManager;
 import fi.matiaspaavilainen.masuiteportalsbridge.PortalRegion;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
