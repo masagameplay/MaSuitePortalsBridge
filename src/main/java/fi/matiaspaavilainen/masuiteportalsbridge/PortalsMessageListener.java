@@ -45,10 +45,14 @@ public class PortalsMessageListener implements PluginMessageListener {
                         }
                         PortalManager.portals.get(Bukkit.getWorld(p[4])).add(portal);
                         PortalManager.loadPortals();
-                        PortalManager.portalNames.add(portal.getName());
-                        System.out.println(PortalManager.portals.get(Bukkit.getWorld(p[4])));
                     } else {
                         System.out.println("World not found");
+                    }
+                }
+                if (childchannel.equals("DeletePortal")) {
+                    String p = in.readUTF();
+                    if (PortalManager.portalNames.contains(p)) {
+                        PortalManager.portals.forEach((world, portals) -> portals.stream().filter(portal -> portal.getName().equals(p)).filter(PortalManager::removePortal));
                     }
                 }
             }

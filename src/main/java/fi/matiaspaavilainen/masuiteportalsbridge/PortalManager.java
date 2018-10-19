@@ -14,4 +14,11 @@ public class PortalManager {
     public static void loadPortals(){
         PortalManager.portals.forEach((world, portals) -> portals.forEach(Portal::fillPortal));
     }
+
+    public static boolean removePortal(Portal portal){
+        portal.clearPortal();
+        portalNames.remove(portal.getName());
+        PortalManager.portals.get(portal.getMaxLoc().getWorld()).remove(portal);
+        return true;
+    }
 }
