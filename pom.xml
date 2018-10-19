@@ -12,7 +12,7 @@
     <name>MaSuitePortalsBridge</name>
     <build>
         <defaultGoal>clean package</defaultGoal>
-        <finalName>MaSuitePortalsBridge-1.12.2</finalName>
+        <finalName>MaSuitePortalsBridge-1.13.1</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
