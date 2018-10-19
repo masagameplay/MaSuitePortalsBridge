@@ -55,24 +55,20 @@ public class Portal {
         System.out.println(getFillType());
         PortalRegion pr = new PortalRegion(getMinLoc(), getMaxLoc());
         pr.blockList().forEach(block -> {
-            if (getFillType().equals("water")) {
-                if (block.getType().equals(Material.AIR)) {
-                    block.setType(Material.WATER);
+            if (block.getType().equals(Material.AIR)) {
+                if (getFillType().equals("water")) {
                     Levelled levelledData = (Levelled) block.getState().getBlockData();
                     levelledData.setLevel(10);
                     block.getState().setBlockData(levelledData);
                 }
+                block.setType(Material.valueOf(getFillType().toUpperCase()));
             }
         });
     }
 
     public void clearPortal() {
         PortalRegion pr = new PortalRegion(getMinLoc(), getMaxLoc());
-        pr.blockList().forEach(block -> {
-            if (block.getType().equals(Material.WATER) || block.getType().equals(Material.LAVA) || block.getType().equals(Material.COBWEB) || block.getType().equals(Material.NETHER_PORTAL)) {
-                block.setType(Material.AIR);
-            }
-        });
+        pr.blockList().forEach(block -> block.setType(Material.AIR));
     }
 
     public String toString() {

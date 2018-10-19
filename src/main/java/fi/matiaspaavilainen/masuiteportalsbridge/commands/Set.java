@@ -1,8 +1,12 @@
-package fi.matiaspaavilainen.masuiteportalsbridge.commands.others;
+package fi.matiaspaavilainen.masuiteportalsbridge.commands;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.LocalSession;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.bukkit.BukkitPlayer;
+import com.sk89q.worldedit.regions.Region;
 import fi.matiaspaavilainen.masuiteportalsbridge.MaSuitePortalsBridge;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -25,9 +29,15 @@ public class Set implements CommandExecutor {
         }
         if (args.length == 4) {
             Player p = (Player) sender;
-            Selection selection = plugin.we.getSelection(p);
-            if (selection != null) {
+            BukkitPlayer bp = BukkitAdapter.adapt(p);
+            LocalSession localSession = plugin.we.getWorldEdit().getSessionManager().get(BukkitAdapter.adapt(p));
+            if (localSession != null) {
                 try {
+                    Region rg = localSession.getSelection(bp.getWorld());
+                    if(rg == null){
+                        System.out.println("No selected area");
+                        return false;
+                    }
                     ByteArrayDataOutput out = ByteStreams.newDataOutput();
                     out.writeUTF("MaSuitePortals");
                     out.writeUTF("SetPortal");
@@ -36,10 +46,10 @@ public class Set implements CommandExecutor {
                     out.writeUTF(args[1]); // Portal type
                     out.writeUTF(args[2]); // Portal destination
                     out.writeUTF(args[3]); // Portal fill type
-                    out.writeUTF(p.getWorld().getName() + ":" + selection.getMinimumPoint().getX() + ":" + selection.getMinimumPoint().getY() + ":" + selection.getMinimumPoint().getZ()); // Portal min loc
-                    out.writeUTF(p.getWorld().getName() + ":" + selection.getMaximumPoint().getX() + ":" + selection.getMaximumPoint().getY() + ":" + selection.getMaximumPoint().getZ()); // Portal max loc
+                    out.writeUTF(p.getWorld().getName() + ":" + rg.getMinimumPoint().getX() + ":" + rg.getMinimumPoint().getY() + ":" + rg.getMinimumPoint().getZ()); // Portal min loc
+                    out.writeUTF(p.getWorld().getName() + ":" + rg.getMaximumPoint().getX() + ":" + rg.getMaximumPoint().getY() + ":" + rg.getMaximumPoint().getZ()); // Portal max loc
                     Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
-                } catch (Exception e) {
+                } catch (IncompleteRegionException e) {
                     e.printStackTrace();
                 }
                 return true;

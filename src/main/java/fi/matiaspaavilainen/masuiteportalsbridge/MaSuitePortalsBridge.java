@@ -5,7 +5,9 @@ import com.google.common.io.ByteStreams;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import fi.matiaspaavilainen.masuiteportalsbridge.commands.Delete;
 import fi.matiaspaavilainen.masuiteportalsbridge.commands.List;
+import fi.matiaspaavilainen.masuiteportalsbridge.commands.Set;
 import fi.matiaspaavilainen.masuiteportalsbridge.listeners.MovementListener;
+import fi.matiaspaavilainen.masuiteportalsbridge.listeners.PhysicsListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -43,13 +45,7 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
     private void registerCommands(){
 
         // Check if server version
-        if(getServer().getVersion().contains("13")){
-            // If version is 1.13, use new WE
-            getCommand("setportal").setExecutor(new fi.matiaspaavilainen.masuiteportalsbridge.commands.aquatic.Set(this));
-        }else{
-            // If version is not 1.13, use old WE
-            getCommand("setportal").setExecutor(new fi.matiaspaavilainen.masuiteportalsbridge.commands.others.Set(this));
-        }
+        getCommand("setportal").setExecutor(new Set(this));
         getCommand("delportal").setExecutor(new Delete(this));
         getCommand("portals").setExecutor(new List(this));
     }
@@ -60,13 +56,7 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new MovementListener(this), this);
         // Check if server version
-        if(getServer().getVersion().contains("13")){
-            // If version is 1.13, use new WE
-            getServer().getPluginManager().registerEvents(new fi.matiaspaavilainen.masuiteportalsbridge.listeners.aquatic.PhysicsListener(), this);
-        }else{
-            // If version is not 1.13, use old WE
-            getServer().getPluginManager().registerEvents(new fi.matiaspaavilainen.masuiteportalsbridge.listeners.others.PhysicsListener(), this);
-        }
+        getServer().getPluginManager().registerEvents(new PhysicsListener(), this);
 
     }
 

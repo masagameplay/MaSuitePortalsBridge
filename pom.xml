@@ -58,7 +58,6 @@
                             <excludes>
                                 <exclude>**/src/main/java/fi.matiaspaavilainen.masuiteportalsbridge.commands.others.Set</exclude>
                                 <exclude>**/src/main/java/fi.matiaspaavilainen.masuiteportalsbridge.listeners.others.PhysicsListener</exclude>
-                                <exclude>**/config/*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
@@ -103,8 +102,8 @@
                             <source>1.8</source>
                             <target>1.8</target>
                             <excludes>
-                                <exclude>**/src/main/java/fi.matiaspaavilainen.masuiteportalsbridge.commands.aquatic.Set</exclude>
-                                <exclude>**/src/main/java/fi.matiaspaavilainen.masuiteportalsbridge.listeners.aquatic.PhysicsListener</exclude>
+                                <exclude>${project.basedir}/src/main/java/fi.matiaspaavilainen.masuiteportalsbridge.commands.Set</exclude>
+                                <exclude>${project.basedir}/src/main/java/fi.matiaspaavilainen.masuiteportalsbridge.listeners.PhysicsListener</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
