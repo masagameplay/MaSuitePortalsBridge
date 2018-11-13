@@ -1,12 +1,13 @@
 package fi.matiaspaavilainen.masuiteportalsbridge;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Player;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class Portal {
 
@@ -19,7 +20,7 @@ public class Portal {
     public Portal() {
     }
 
-    public Portal(String name, String type, String destination, Location minLoc, Location maxLoc, String fillType) {
+    public Portal(String name, String type, String destination, String fillType, Location minLoc, Location maxLoc) {
         this.name = name;
         this.type = type;
         this.destination = destination;
@@ -30,38 +31,39 @@ public class Portal {
 
 
     public void send(Player p, MaSuitePortalsBridge plugin) {
-        if (getType().equals("server")) {
-            try {
-                ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        try (ByteArrayOutputStream b = new ByteArrayOutputStream();
+             DataOutputStream out = new DataOutputStream(b)) {
+            if (getType().equals("server")) {
+
                 out.writeUTF("ConnectOther");
                 out.writeUTF(p.getName());
                 out.writeUTF(getDestination());
-                Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
-            } catch (Exception ex) {
-                ex.getStackTrace();
-            }
-        } else if (getType().equals("warp")) {
-            ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("WarpPlayerCommand");
-            out.writeUTF(p.getName());
-            out.writeUTF("console");
-            out.writeUTF(getDestination());
+                p.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
+            } else if (getType().equals("warp")) {
 
-            Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+                out.writeUTF("WarpPlayerCommand");
+                out.writeUTF(p.getName());
+                out.writeUTF("console");
+                out.writeUTF(getDestination());
+
+                p.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
     public void fillPortal() {
-        System.out.println(getFillType());
         PortalRegion pr = new PortalRegion(getMinLoc(), getMaxLoc());
         pr.blockList().forEach(block -> {
             if (block.getType().equals(Material.AIR)) {
+                block.setType(Material.valueOf(getFillType().toUpperCase()));
                 if (getFillType().equals("water")) {
                     Levelled levelledData = (Levelled) block.getState().getBlockData();
-                    levelledData.setLevel(10);
+                    levelledData.setLevel(0);
                     block.getState().setBlockData(levelledData);
                 }
-                block.setType(Material.valueOf(getFillType().toUpperCase()));
+
             }
         });
     }
