@@ -8,9 +8,12 @@ commands:
   setportal:
     description: Sets portal
     aliases: [createportal, portalset]
+    permission: masuiteportals.portal.set
   delportal:
     description: Deletes portal
     aliases: [deleteportal, portaldel]
+    permission: masuiteportals.portal.delete
   portals:
     description: List all available portals
     aliases: [portalslist, listportals]
+    permission: masuiteportals.portal.list
