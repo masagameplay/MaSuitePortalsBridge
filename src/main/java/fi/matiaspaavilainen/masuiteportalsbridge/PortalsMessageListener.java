@@ -53,9 +53,7 @@ public class PortalsMessageListener implements PluginMessageListener {
                     }
                 }
                 if (childchannel.equals("DeletePortal")) {
-                    System.out.println("Received");
                     String p = in.readUTF();
-                    System.out.println(p);
                     if (PortalManager.portalNames.contains(p)) {
                         System.out.println(p);
                         Portal por = PortalManager.portals.values().stream().map(portals1 -> portals1.stream().filter(portal -> portal.getName().equalsIgnoreCase(p)).findFirst().get()).findFirst().get();
