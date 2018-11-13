@@ -24,20 +24,20 @@ public class MovementListener implements Listener {
         Player p = e.getPlayer();
         Block t = e.getTo().getBlock();
         Block f = e.getFrom().getBlock();
-        if(f.equals(t)){
+        if (f.equals(t)) {
             return;
         }
-        if(!PortalManager.portals.containsKey(p.getWorld())){
+        if (!PortalManager.portals.containsKey(p.getWorld())) {
             return;
         }
         PortalManager.portals.get(p.getWorld()).forEach(portal -> {
             Location corner1 = new Location(p.getWorld(), portal.getMinLoc().getX(), portal.getMinLoc().getY(), portal.getMinLoc().getZ());
             Location corner2 = new Location(p.getWorld(), portal.getMaxLoc().getX(), portal.getMaxLoc().getY(), portal.getMaxLoc().getZ());
             PortalRegion pr = new PortalRegion(corner1, corner2);
-            if(pr.isIn(p)){
+            if (pr.isInWithMarge(p.getLocation(), 1)) {
                 Vector unitVector = e.getFrom().toVector().subtract(e.getTo().toVector()).normalize();
                 Location l = e.getPlayer().getLocation();
-                l.setYaw(l.getYaw()+180);
+                l.setYaw(l.getYaw() + 180);
                 e.getPlayer().teleport(l);
                 e.getPlayer().setVelocity(unitVector.multiply(0.3));
                 portal.send(p, plugin);
