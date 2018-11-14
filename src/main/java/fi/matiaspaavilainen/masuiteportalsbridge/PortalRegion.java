@@ -24,6 +24,11 @@ public class PortalRegion {
     private final double zMaxCentered;
     private final World world;
 
+    /**
+     * Creates region between two points
+     * @param point1 the first corner
+     * @param point2 the second corner
+     */
     public PortalRegion(final Location point1, final Location point2) {
         this.xMin = Math.min(point1.getBlockX(), point2.getBlockX());
         this.xMax = Math.max(point1.getBlockX(), point2.getBlockX());
@@ -40,6 +45,10 @@ public class PortalRegion {
         this.zMaxCentered = this.zMax + 0.5;
     }
 
+    /**
+     * Get blocks from Region
+     * @return a list of blocks
+     */
     public ArrayList<Block> blockList() {
         final ArrayList<Block> bL = new ArrayList<>(this.getTotalBlockSize());
         for(int x = this.xMin; x <= this.xMax; ++x) {
@@ -54,30 +63,55 @@ public class PortalRegion {
         return bL;
     }
 
+    /**
+     * Gets center location of region
+     * @return center location of region
+     */
     public Location getCenter() {
         return new Location(this.world, (this.xMax - this.xMin) / 2 + this.xMin, (this.yMax - this.yMin) / 2 + this.yMin, (this.zMax - this.zMin) / 2 + this.zMin);
     }
 
+    /**
+     * Gets distance between two points
+     * @return
+     */
     public double getDistance() {
         return this.getPoint1().distance(this.getPoint2());
     }
+
 
     public double getDistanceSquared() {
         return this.getPoint1().distanceSquared(this.getPoint2());
     }
 
+    /**
+     * Gets height of region
+     * @return height location of region
+     */
     public int getHeight() {
         return this.yMax - this.yMin + 1;
     }
 
+    /**
+     * Gets the first point of region
+     * @return the first point of region
+     */
     public Location getPoint1() {
         return new Location(this.world, this.xMin, this.yMin, this.zMin);
     }
 
+    /**
+     * Gets the second point of region
+     * @return the second point of region
+     */
     public Location getPoint2() {
         return new Location(this.world, this.xMax, this.yMax, this.zMax);
     }
 
+    /**
+     * Gets random location from region
+     * @return random location from region
+     */
     public Location getRandomLocation() {
         final Random rand = new Random();
         final int x = rand.nextInt(Math.abs(this.xMax - this.xMin) + 1) + this.xMin;
@@ -86,27 +120,55 @@ public class PortalRegion {
         return new Location(this.world, x, y, z);
     }
 
+    /**
+     * Gets total block size region
+     * @return total block size of region
+     */
     public int getTotalBlockSize() {
         return this.getHeight() * this.getXWidth() * this.getZWidth();
     }
 
+    /**
+     * Gets x width of region
+     * @return x width of region
+     */
     public int getXWidth() {
         return this.xMax - this.xMin + 1;
     }
 
+    /**
+     * Gets z width of region
+     * @return z width of region
+     */
     public int getZWidth() {
         return this.zMax - this.zMin + 1;
     }
 
+    /**
+     * Check if {@link Location} is inside of region
+     * @param loc checkable location
+     * @return boolean
+     */
     public boolean isIn(final Location loc) {
         return loc.getWorld() == this.world && loc.getBlockX() >= this.xMin && loc.getBlockX() <= this.xMax && loc.getBlockY() >= this.yMin && loc.getBlockY() <= this.yMax && loc
                 .getBlockZ() >= this.zMin && loc.getBlockZ() <= this.zMax;
     }
 
+    /**
+     * Check if {@link Player} is inside of region
+     * @param player checkable player
+     * @return boolean
+     */
     public boolean isIn(final Player player) {
         return this.isIn(player.getLocation());
     }
 
+    /**
+     * Check if {@link Location} is inside of region with marge
+     * @param loc location to check
+     * @param marge size of margin
+     * @return boolean
+     */
     public boolean isInWithMarge(final Location loc, final double marge) {
         return loc.getWorld() == this.world && loc.getX() >= this.xMinCentered - marge && loc.getX() <= this.xMaxCentered + marge && loc.getY() >= this.yMinCentered - marge && loc
                 .getY() <= this.yMaxCentered + marge && loc.getZ() >= this.zMinCentered - marge && loc.getZ() <= this.zMaxCentered + marge;
