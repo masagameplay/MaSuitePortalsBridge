@@ -1,4 +1,4 @@
-/**
+/*
  * Original author: AltFreq
  * Updated version for MaSuite: Masa
  */
