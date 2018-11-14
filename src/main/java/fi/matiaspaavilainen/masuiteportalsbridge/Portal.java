@@ -20,6 +20,15 @@ public class Portal {
     public Portal() {
     }
 
+    /**
+     * Constructor for Portal
+     * @param name portal's name
+     * @param type portal's type (warp/server)
+     * @param destination portal's destination (server or warp name)
+     * @param fillType what {@link Material} will be used to fill the portal
+     * @param minLoc the first corner of portal
+     * @param maxLoc the second corner of portal
+     */
     public Portal(String name, String type, String destination, String fillType, Location minLoc, Location maxLoc) {
         this.name = name;
         this.type = type;
@@ -29,30 +38,37 @@ public class Portal {
         this.fillType = fillType;
     }
 
-
-    public void send(Player p, MaSuitePortalsBridge plugin) {
+    /**
+     * Sends player trough portal
+     * @param player to send
+     * @param plugin to use in plugin messages
+     */
+    public void send(Player player, MaSuitePortalsBridge plugin) {
         try (ByteArrayOutputStream b = new ByteArrayOutputStream();
              DataOutputStream out = new DataOutputStream(b)) {
             if (getType().equals("server")) {
 
                 out.writeUTF("ConnectOther");
-                out.writeUTF(p.getName());
+                out.writeUTF(player.getName());
                 out.writeUTF(getDestination());
-                p.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
+                player.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
             } else if (getType().equals("warp")) {
 
                 out.writeUTF("WarpPlayerCommand");
-                out.writeUTF(p.getName());
+                out.writeUTF(player.getName());
                 out.writeUTF("console");
                 out.writeUTF(getDestination());
 
-                p.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
+                player.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
+    /**
+     * Fills portal
+     */
     public void fillPortal() {
         PortalRegion pr = new PortalRegion(getMinLoc(), getMaxLoc());
         pr.blockList().forEach(block -> {
@@ -68,11 +84,18 @@ public class Portal {
         });
     }
 
+    /**
+     * Sets portal material to {@link Material#AIR}
+     */
     public void clearPortal() {
         PortalRegion pr = new PortalRegion(getMinLoc(), getMaxLoc());
         pr.blockList().forEach(block -> block.setType(Material.AIR));
     }
 
+    /**
+     * Returns portal info as string
+     * @return portal info
+     */
     public String toString() {
         String minLoc = getMinLoc().getWorld() + ":" + getMinLoc().getX() + ":" + getMinLoc().getY() + ":" + getMinLoc().getZ();
         String maxLoc = getMaxLoc().getX() + ":" + getMaxLoc().getY() + ":" + getMaxLoc().getZ();
