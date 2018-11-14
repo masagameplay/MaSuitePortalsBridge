@@ -16,6 +16,7 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 
 public class PhysicsListener implements Listener {
+
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlockPhysics(BlockPhysicsEvent e) {
         if (!PortalManager.portals.containsKey(e.getBlock().getWorld())) {
