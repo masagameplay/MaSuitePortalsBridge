@@ -22,6 +22,7 @@ public class PortalsMessageListener implements PluginMessageListener {
         if (!channel.equals("BungeeCord")) {
             return;
         }
+
         DataInputStream in = new DataInputStream(new ByteArrayInputStream(message));
         String subchannel = null;
         try {
@@ -69,7 +70,7 @@ public class PortalsMessageListener implements PluginMessageListener {
                         PortalManager.loadPortals();
                     } else {
                         // Return warning message
-                        System.out.println("[MaSuite] [Portals] [Portal="+ p[0]+ "] World not found");
+                        System.out.println("[MaSuite] [Portals] [Portal=" + p[0] + "] [World=" + p[4] + "] World not found");
                     }
                 }
 

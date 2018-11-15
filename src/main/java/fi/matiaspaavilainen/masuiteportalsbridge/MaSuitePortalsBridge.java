@@ -1,7 +1,5 @@
 package fi.matiaspaavilainen.masuiteportalsbridge;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import fi.matiaspaavilainen.masuiteportalsbridge.commands.Delete;
 import fi.matiaspaavilainen.masuiteportalsbridge.commands.List;
@@ -11,6 +9,9 @@ import fi.matiaspaavilainen.masuiteportalsbridge.listeners.PhysicsListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public final class MaSuitePortalsBridge extends JavaPlugin {
@@ -21,8 +22,9 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        we = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
-        if(we == null){
+        // Load WorldEdit
+        we = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
+        if (we == null) {
             System.out.println("[MaSuitePortals] WorldEdit not detected. Disabling...");
             getServer().getPluginManager().disablePlugin(this);
         }
@@ -42,7 +44,7 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
         PortalManager.portals.forEach(((world, portals) -> portals.forEach(Portal::clearPortal)));
     }
 
-    private void registerCommands(){
+    private void registerCommands() {
 
         // Check if server version
         getCommand("setportal").setExecutor(new Set(this));
@@ -50,23 +52,29 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
         getCommand("portals").setExecutor(new List(this));
     }
 
-    private void registerListener(){
+    private void registerListener() {
+
+        // Register listener
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PortalsMessageListener(this));
 
         getServer().getPluginManager().registerEvents(new MovementListener(this), this);
-        // Check if server version
         getServer().getPluginManager().registerEvents(new PhysicsListener(), this);
 
     }
 
-    private void initLists(){
+    private void initLists() {
         getServer().getWorlds().forEach(world -> PortalManager.portals.put(world, new ArrayList<Portal>()));
     }
+
     private void reguestPortals() {
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("MaSuitePortals");
-        out.writeUTF("RequestPortals");
-        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> getServer().sendPluginMessage(this, "BungeeCord", out.toByteArray()), 0, 30000);
+        try (ByteArrayOutputStream b = new ByteArrayOutputStream();
+             DataOutputStream out = new DataOutputStream(b)) {
+            out.writeUTF("MaSuitePortals");
+            out.writeUTF("RequestPortals");
+            getServer().getScheduler().runTaskTimerAsynchronously(this, () -> getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray()), 0, 30000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

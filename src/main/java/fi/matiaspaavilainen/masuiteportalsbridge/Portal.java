@@ -22,12 +22,13 @@ public class Portal {
 
     /**
      * Constructor for Portal
-     * @param name portal's name
-     * @param type portal's type (warp/server)
+     *
+     * @param name        portal's name
+     * @param type        portal's type (warp/server)
      * @param destination portal's destination (server or warp name)
-     * @param fillType what {@link Material} will be used to fill the portal
-     * @param minLoc the first corner of portal
-     * @param maxLoc the second corner of portal
+     * @param fillType    what {@link Material} will be used to fill the portal
+     * @param minLoc      the first corner of portal
+     * @param maxLoc      the second corner of portal
      */
     public Portal(String name, String type, String destination, String fillType, Location minLoc, Location maxLoc) {
         this.name = name;
@@ -40,6 +41,7 @@ public class Portal {
 
     /**
      * Sends player trough portal
+     *
      * @param player to send
      * @param plugin to use in plugin messages
      */
@@ -94,6 +96,7 @@ public class Portal {
 
     /**
      * Returns portal info as string
+     *
      * @return portal info
      */
     public String toString() {

@@ -36,7 +36,7 @@ public class Set implements CommandExecutor {
             if (localSession != null) {
                 try {
                     Region rg = localSession.getSelection(bp.getWorld());
-                    if(rg == null){
+                    if (rg == null) {
                         p.sendMessage(ChatColor.RED + "No selected area");
                         return false;
                     }
@@ -52,7 +52,7 @@ public class Set implements CommandExecutor {
                         out.writeUTF(p.getWorld().getName() + ":" + rg.getMinimumPoint().getX() + ":" + rg.getMinimumPoint().getY() + ":" + rg.getMinimumPoint().getZ()); // Portal min loc
                         out.writeUTF(p.getWorld().getName() + ":" + rg.getMaximumPoint().getX() + ":" + rg.getMaximumPoint().getY() + ":" + rg.getMaximumPoint().getZ()); // Portal max loc
                         p.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
-                    } catch (IOException e){
+                    } catch (IOException e) {
                         e.getStackTrace();
                     }
                 } catch (IncompleteRegionException e) {

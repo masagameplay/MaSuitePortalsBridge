@@ -26,6 +26,7 @@ public class PortalRegion {
 
     /**
      * Creates region between two points
+     *
      * @param point1 the first corner
      * @param point2 the second corner
      */
@@ -47,13 +48,14 @@ public class PortalRegion {
 
     /**
      * Get blocks from Region
+     *
      * @return a list of blocks
      */
     public ArrayList<Block> blockList() {
         final ArrayList<Block> bL = new ArrayList<>(this.getTotalBlockSize());
-        for(int x = this.xMin; x <= this.xMax; ++x) {
-            for(int y = this.yMin; y <= this.yMax; ++y) {
-                for(int z = this.zMin; z <= this.zMax; ++z) {
+        for (int x = this.xMin; x <= this.xMax; ++x) {
+            for (int y = this.yMin; y <= this.yMax; ++y) {
+                for (int z = this.zMin; z <= this.zMax; ++z) {
                     final Block b = this.world.getBlockAt(x, y, z);
                     bL.add(b);
                     bL.iterator();
@@ -65,6 +67,7 @@ public class PortalRegion {
 
     /**
      * Gets center location of region
+     *
      * @return center location of region
      */
     public Location getCenter() {
@@ -73,6 +76,7 @@ public class PortalRegion {
 
     /**
      * Gets distance between two points
+     *
      * @return
      */
     public double getDistance() {
@@ -86,6 +90,7 @@ public class PortalRegion {
 
     /**
      * Gets height of region
+     *
      * @return height location of region
      */
     public int getHeight() {
@@ -94,6 +99,7 @@ public class PortalRegion {
 
     /**
      * Gets the first point of region
+     *
      * @return the first point of region
      */
     public Location getPoint1() {
@@ -102,6 +108,7 @@ public class PortalRegion {
 
     /**
      * Gets the second point of region
+     *
      * @return the second point of region
      */
     public Location getPoint2() {
@@ -110,6 +117,7 @@ public class PortalRegion {
 
     /**
      * Gets random location from region
+     *
      * @return random location from region
      */
     public Location getRandomLocation() {
@@ -122,6 +130,7 @@ public class PortalRegion {
 
     /**
      * Gets total block size region
+     *
      * @return total block size of region
      */
     public int getTotalBlockSize() {
@@ -130,6 +139,7 @@ public class PortalRegion {
 
     /**
      * Gets x width of region
+     *
      * @return x width of region
      */
     public int getXWidth() {
@@ -138,6 +148,7 @@ public class PortalRegion {
 
     /**
      * Gets z width of region
+     *
      * @return z width of region
      */
     public int getZWidth() {
@@ -146,6 +157,7 @@ public class PortalRegion {
 
     /**
      * Check if {@link Location} is inside of region
+     *
      * @param loc checkable location
      * @return boolean
      */
@@ -156,6 +168,7 @@ public class PortalRegion {
 
     /**
      * Check if {@link Player} is inside of region
+     *
      * @param player checkable player
      * @return boolean
      */
@@ -165,7 +178,8 @@ public class PortalRegion {
 
     /**
      * Check if {@link Location} is inside of region with marge
-     * @param loc location to check
+     *
+     * @param loc   location to check
      * @param marge size of margin
      * @return boolean
      */

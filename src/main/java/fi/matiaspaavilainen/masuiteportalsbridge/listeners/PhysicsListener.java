@@ -34,11 +34,11 @@ public class PhysicsListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPhysics(BlockFromToEvent e) {
-        if(!PortalManager.portals.containsKey(e.getBlock().getWorld())){
+        if (!PortalManager.portals.containsKey(e.getBlock().getWorld())) {
             return;
         }
 
-        for(Portal portal: PortalManager.portals.get(e.getBlock().getWorld())){
+        for (Portal portal : PortalManager.portals.get(e.getBlock().getWorld())) {
             PortalRegion pr = new PortalRegion(portal.getMinLoc(), portal.getMaxLoc());
             if (pr.isIn(e.getBlock().getLocation())) {
                 e.setCancelled(true);
@@ -49,11 +49,11 @@ public class PhysicsListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent e) {
-        if(!PortalManager.portals.containsKey(e.getBlock().getWorld())){
+        if (!PortalManager.portals.containsKey(e.getBlock().getWorld())) {
             return;
         }
 
-        for(Portal portal: PortalManager.portals.get(e.getBlock().getWorld())){
+        for (Portal portal : PortalManager.portals.get(e.getBlock().getWorld())) {
             PortalRegion pr = new PortalRegion(portal.getMinLoc(), portal.getMaxLoc());
             if (pr.isIn(e.getBlock().getLocation())) {
                 e.setCancelled(true);

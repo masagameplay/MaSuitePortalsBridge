@@ -14,13 +14,14 @@ import java.io.IOException;
 public class List implements CommandExecutor {
 
     private MaSuitePortalsBridge plugin;
-    public List(MaSuitePortalsBridge p){
+
+    public List(MaSuitePortalsBridge p) {
         plugin = p;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(!(sender instanceof Player)){
+        if (!(sender instanceof Player)) {
             return false;
         }
         try (ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -29,7 +30,7 @@ public class List implements CommandExecutor {
             out.writeUTF("List");
             out.writeUTF(sender.getName());
             Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
