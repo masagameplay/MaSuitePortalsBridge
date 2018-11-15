@@ -6,7 +6,7 @@ import fi.matiaspaavilainen.masuiteportalsbridge.commands.List;
 import fi.matiaspaavilainen.masuiteportalsbridge.commands.Set;
 import fi.matiaspaavilainen.masuiteportalsbridge.listeners.MovementListener;
 import fi.matiaspaavilainen.masuiteportalsbridge.listeners.PhysicsListener;
-import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.ByteArrayOutputStream;
@@ -18,7 +18,7 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
 
     public WorldEditPlugin we = null;
 
-    private Config config = new Config(this);
+    public Config config = new Config(this);
 
     @Override
     public void onEnable() {
@@ -44,17 +44,19 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
         PortalManager.portals.forEach(((world, portals) -> portals.forEach(Portal::clearPortal)));
     }
 
+    /**
+     * Register commands
+     */
     private void registerCommands() {
-
-        // Check if server version
         getCommand("setportal").setExecutor(new Set(this));
         getCommand("delportal").setExecutor(new Delete(this));
         getCommand("portals").setExecutor(new List(this));
     }
 
+    /**
+     * Register listener
+     */
     private void registerListener() {
-
-        // Register listener
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PortalsMessageListener(this));
 
@@ -63,10 +65,16 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
 
     }
 
+    /**
+     * Initialize lists for Portals
+     */
     private void initLists() {
         getServer().getWorlds().forEach(world -> PortalManager.portals.put(world, new ArrayList<Portal>()));
     }
 
+    /**
+     * Send request to get portals from Bungee
+     */
     private void reguestPortals() {
         try (ByteArrayOutputStream b = new ByteArrayOutputStream();
              DataOutputStream out = new DataOutputStream(b)) {
@@ -76,5 +84,15 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Colorize string
+     *
+     * @param s string to colorize
+     * @return colorized string
+     */
+    public static String colorize(String s) {
+        return ChatColor.translateAlternateColorCodes('&', s);
     }
 }
