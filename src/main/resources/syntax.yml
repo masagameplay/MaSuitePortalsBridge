@@ -1,3 +1,4 @@
 portal:
   set: "&cCorrect syntax: /setportal <name> <type> <destination> <filltype>"
-  delete: "&Correct syntax: /delportal <name>"
+  delete: "&cCorrect syntax: /delportal <name>"
+  list: "&cCorrect syntax: /portals"
