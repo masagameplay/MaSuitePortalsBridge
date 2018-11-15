@@ -6,7 +6,6 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.regions.Region;
 import fi.matiaspaavilainen.masuiteportalsbridge.MaSuitePortalsBridge;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,6 +14,8 @@ import org.bukkit.entity.Player;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import static fi.matiaspaavilainen.masuiteportalsbridge.MaSuitePortalsBridge.colorize;
 
 public class Set implements CommandExecutor {
 
@@ -37,7 +38,7 @@ public class Set implements CommandExecutor {
                 try {
                     Region rg = localSession.getSelection(bp.getWorld());
                     if (rg == null) {
-                        p.sendMessage(ChatColor.RED + "No selected area");
+                        p.sendMessage(colorize(plugin.config.getMessages().getString("no-selected-area")));
                         return false;
                     }
                     try (ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -60,11 +61,11 @@ public class Set implements CommandExecutor {
                 }
                 return true;
             } else {
-                p.sendMessage(ChatColor.RED + "No selected area");
+                p.sendMessage(colorize(plugin.config.getMessages().getString("no-selected-area")));
                 return false;
             }
         } else {
-            p.sendMessage(ChatColor.RED + "Correct syntax: /setportal <name> <warp/server> <target> <fill type>");
+            p.sendMessage(colorize(plugin.config.getSyntaxes().getString("portal.set")));
             return false;
         }
 
