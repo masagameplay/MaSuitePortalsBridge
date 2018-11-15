@@ -12,7 +12,7 @@
     <name>MaSuitePortalsBridge</name>
     <build>
         <defaultGoal>clean package</defaultGoal>
-        <finalName>MaSuitePortalsBridge-1.13.1</finalName>
+        <finalName>MaSuitePortalsBridge-1.13.2</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -59,7 +59,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13.1-R0.1-SNAPSHOT</version>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
