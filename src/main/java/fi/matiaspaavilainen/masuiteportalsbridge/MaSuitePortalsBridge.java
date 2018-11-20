@@ -7,6 +7,9 @@ import fi.matiaspaavilainen.masuiteportalsbridge.commands.Set;
 import fi.matiaspaavilainen.masuiteportalsbridge.listeners.MovementListener;
 import fi.matiaspaavilainen.masuiteportalsbridge.listeners.PhysicsListener;
 import org.bukkit.ChatColor;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.ByteArrayOutputStream;
@@ -14,7 +17,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public final class MaSuitePortalsBridge extends JavaPlugin {
+public final class MaSuitePortalsBridge extends JavaPlugin implements Listener {
 
     public WorldEditPlugin we = null;
 
@@ -34,7 +37,7 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
         registerListener();
         initLists();
         reguestPortals();
-
+        getServer().getPluginManager().registerEvents(this, this);
         // Create configs
         config.createConfigs();
     }
@@ -83,6 +86,21 @@ public final class MaSuitePortalsBridge extends JavaPlugin {
             getServer().getScheduler().runTaskTimerAsynchronously(this, () -> getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray()), 0, 30000);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e) {
+        // If list is empty when player joins, request portals
+        if (PortalManager.portals.isEmpty()) {
+            try (ByteArrayOutputStream b = new ByteArrayOutputStream();
+                 DataOutputStream out = new DataOutputStream(b)) {
+                out.writeUTF("MaSuitePortals");
+                out.writeUTF("RequestPortals");
+                getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
