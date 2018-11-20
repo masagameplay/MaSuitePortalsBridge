@@ -28,7 +28,7 @@ public class MovementListener implements Listener {
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
         if (inPortal.containsKey(p.getUniqueId())) {
-            if ((inPortal.get(p.getUniqueId()) - System.currentTimeMillis()) / 1000 < 3) {
+            if ((inPortal.get(p.getUniqueId()) - System.currentTimeMillis()) / 1000 > 3) {
                 inPortal.remove(p.getUniqueId());
             } else {
                 return;
@@ -63,9 +63,9 @@ public class MovementListener implements Listener {
                 Vector unitVector = e.getFrom().toVector().subtract(e.getTo().toVector()).normalize();
                 Location l = e.getPlayer().getLocation();
                 l.setYaw(l.getYaw() + 180);
+                unitVector.multiply(2);
+                l.add(unitVector);
                 p.teleport(l);
-                p.setVelocity(unitVector.multiply(0.3));
-
                 // Send player
                 portal.send(p, plugin);
                 inPortal.put(p.getUniqueId(), System.currentTimeMillis());

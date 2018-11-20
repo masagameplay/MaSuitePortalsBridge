@@ -188,4 +188,10 @@ public class PortalRegion {
                 .getY() <= this.yMaxCentered + marge && loc.getZ() >= this.zMinCentered - marge && loc.getZ() <= this.zMaxCentered + marge;
     }
 
+    public boolean isInWithYMarge(final Location loc, final double marge) {
+        return loc.getWorld() == this.world && loc.getBlockX() >= this.xMin && loc.getBlockX() <= this.xMax && loc.getY() >= this.yMinCentered - marge && loc.getY() <= this.yMaxCentered + marge && loc
+                .getBlockZ() >= this.zMin && loc.getBlockZ() <= this.zMax;
+    }
+
+
 }

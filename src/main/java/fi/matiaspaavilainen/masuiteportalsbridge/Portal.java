@@ -100,12 +100,11 @@ public class Portal {
                             break;
                     }
                     block.setBlockData(orientable);
-
                 } else {
                     block.setType(Material.valueOf(getFillType().toUpperCase()));
                     if (getFillType().equals("water")) {
                         Levelled levelledData = (Levelled) block.getState().getBlockData();
-                        levelledData.setLevel(0);
+                        levelledData.setLevel(6);
                         block.getState().setBlockData(levelledData);
                     }
                 }
