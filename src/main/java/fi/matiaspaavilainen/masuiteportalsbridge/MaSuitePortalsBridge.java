@@ -94,12 +94,12 @@ public final class MaSuitePortalsBridge extends JavaPlugin implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         // If list is empty when player joins, request portals
-        if (PortalManager.portals.isEmpty()) {
+        if (PortalManager.portalNames.isEmpty()) {
             try (ByteArrayOutputStream b = new ByteArrayOutputStream();
                  DataOutputStream out = new DataOutputStream(b)) {
                 out.writeUTF("MaSuitePortals");
                 out.writeUTF("RequestPortals");
-                getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray());
+                getServer().getScheduler().runTaskLater(this, () -> e.getPlayer().sendPluginMessage(this, "BungeeCord", b.toByteArray()), 100);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
