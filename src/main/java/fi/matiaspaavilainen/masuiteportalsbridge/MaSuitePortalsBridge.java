@@ -37,7 +37,8 @@ public final class MaSuitePortalsBridge extends JavaPlugin implements Listener {
         registerListener();
         initLists();
         reguestPortals();
-        getServer().getPluginManager().registerEvents(this, this);
+
+
         // Create configs
         config.createConfigs();
     }
@@ -65,6 +66,7 @@ public final class MaSuitePortalsBridge extends JavaPlugin implements Listener {
 
         getServer().getPluginManager().registerEvents(new MovementListener(this), this);
         getServer().getPluginManager().registerEvents(new PhysicsListener(), this);
+        getServer().getPluginManager().registerEvents(this, this);
 
     }
 

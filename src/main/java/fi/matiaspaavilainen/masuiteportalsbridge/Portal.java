@@ -1,13 +1,18 @@
 package fi.matiaspaavilainen.masuiteportalsbridge;
 
+import org.bukkit.Axis;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.Orientable;
 import org.bukkit.entity.Player;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Portal {
 
@@ -75,12 +80,36 @@ public class Portal {
         PortalRegion pr = new PortalRegion(getMinLoc(), getMaxLoc());
         pr.blockList().forEach(block -> {
             if (block.getType().equals(Material.AIR)) {
-                block.setType(Material.valueOf(getFillType().toUpperCase()));
-                if (getFillType().equals("water")) {
-                    Levelled levelledData = (Levelled) block.getState().getBlockData();
-                    levelledData.setLevel(0);
-                    block.getState().setBlockData(levelledData);
+
+                // Portal manipulation if type is nether_portal
+                if (getFillType().toLowerCase().contains("nether_portal")) {
+                    block.setType(Material.NETHER_PORTAL);
+                    Orientable orientable = (Orientable) block.getBlockData();
+                    switch (getFillType().toLowerCase()) {
+                        case ("nether_portal_north"):
+                            orientable.setAxis(Axis.X);
+                            break;
+                        case ("nether_portal_east"):
+                            orientable.setAxis(Axis.Z);
+                            break;
+                        case ("nether_portal_south"):
+                            orientable.setAxis(Axis.X);
+                            break;
+                        case ("nether_portal_west"):
+                            orientable.setAxis(Axis.Z);
+                            break;
+                    }
+                    block.setBlockData(orientable);
+
+                } else {
+                    block.setType(Material.valueOf(getFillType().toUpperCase()));
+                    if (getFillType().equals("water")) {
+                        Levelled levelledData = (Levelled) block.getState().getBlockData();
+                        levelledData.setLevel(0);
+                        block.getState().setBlockData(levelledData);
+                    }
                 }
+
 
             }
         });

@@ -48,7 +48,7 @@ public class Set implements CommandExecutor {
                 p.sendMessage(colorize(plugin.config.getMessages().getString("no-selected-area")));
                 return false;
             }
-            if (Material.matchMaterial(args[3].toUpperCase()) == null) {
+            if (Material.matchMaterial(args[3].toUpperCase()) == null && !args[3].contains("nether_portal")) {
                 p.sendMessage(colorize(plugin.config.getMessages().getString("invalid-material")));
                 return false;
             }
