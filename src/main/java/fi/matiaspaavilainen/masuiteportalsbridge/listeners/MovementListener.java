@@ -27,13 +27,6 @@ public class MovementListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
-        if (inPortal.containsKey(p.getUniqueId())) {
-            if ((inPortal.get(p.getUniqueId()) - System.currentTimeMillis()) / 1000 > 3) {
-                inPortal.remove(p.getUniqueId());
-            } else {
-                return;
-            }
-        }
 
         Block t = e.getTo().getBlock();
         Block f = e.getFrom().getBlock();
@@ -68,7 +61,6 @@ public class MovementListener implements Listener {
                 p.teleport(l);
                 // Send player
                 portal.send(p, plugin);
-                inPortal.put(p.getUniqueId(), System.currentTimeMillis());
             }
         });
 

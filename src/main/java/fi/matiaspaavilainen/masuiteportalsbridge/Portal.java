@@ -3,8 +3,6 @@ package fi.matiaspaavilainen.masuiteportalsbridge;
 import org.bukkit.Axis;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.entity.Player;
@@ -12,7 +10,6 @@ import org.bukkit.entity.Player;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class Portal {
 
@@ -39,9 +36,9 @@ public class Portal {
         this.name = name;
         this.type = type;
         this.destination = destination;
+        this.fillType = fillType;
         this.minLoc = minLoc;
         this.maxLoc = maxLoc;
-        this.fillType = fillType;
     }
 
     /**
@@ -54,7 +51,6 @@ public class Portal {
         try (ByteArrayOutputStream b = new ByteArrayOutputStream();
              DataOutputStream out = new DataOutputStream(b)) {
             if (getType().equals("server")) {
-
                 out.writeUTF("ConnectOther");
                 out.writeUTF(player.getName());
                 out.writeUTF(getDestination());
@@ -79,8 +75,7 @@ public class Portal {
     public void fillPortal() {
         PortalRegion pr = new PortalRegion(getMinLoc(), getMaxLoc());
         pr.blockList().forEach(block -> {
-            if (block.getType().equals(Material.AIR)) {
-
+            if (block.getBlockData().getMaterial().equals(Material.AIR)) {
                 // Portal manipulation if type is nether_portal
                 if (getFillType().toLowerCase().contains("nether_portal")) {
                     block.setType(Material.NETHER_PORTAL);
@@ -119,7 +114,12 @@ public class Portal {
      */
     public void clearPortal() {
         PortalRegion pr = new PortalRegion(getMinLoc(), getMaxLoc());
-        pr.blockList().forEach(block -> block.setType(Material.AIR));
+        pr.blockList().forEach(block -> {
+            if(block.getType().toString().toLowerCase().equals(getFillType())){
+                block.setType(Material.AIR);
+            }
+
+        });
     }
 
     /**

@@ -40,7 +40,7 @@ public class Delete implements CommandExecutor {
             out.writeUTF("DelPortal");
             out.writeUTF(p.getName()); // Creator's name
             out.writeUTF(args[0]); // Portal name
-            Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
+            p.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
         } catch (IOException e) {
             e.getStackTrace();
         }

@@ -8,6 +8,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.List;
 
 public class PortalsMessageListener implements PluginMessageListener {
 
@@ -37,37 +38,46 @@ public class PortalsMessageListener implements PluginMessageListener {
 
                     // If portal's world is not null
                     if (Bukkit.getWorld(p[4]) != null) {
+                        Portal portal = null;
                         // If portal exists
                         if (PortalManager.portalNames.contains(p[0])) {
-                            // Check if the portal is not null
-                            if (PortalManager.portals.values().stream().map(portals1 -> portals1.stream().filter(portal -> portal.getName().equalsIgnoreCase(p[0])).findFirst().get()).findFirst().isPresent()) {
-                                // Load the portal
-                                Portal por = PortalManager.portals.values().stream().map(portals1 -> portals1.stream().filter(portal -> portal.getName().equalsIgnoreCase(p[0])).findFirst().get()).findFirst().get();
-                                //Remove it
-                                PortalManager.removePortal(por);
+                            // Load the portal
+                            for (List<Portal> portals : PortalManager.portals.values()) {
+                                for (Portal por : portals) {
+                                    if (por.getName().equalsIgnoreCase(p[0])) {
+                                        portal = por;
+                                        //Remove it
+                                        PortalManager.removePortal(portal);
 
-                                // Bind new values
-                                por.setType(p[1]);
-                                por.setDestination(p[2]);
-                                por.setFillType(p[3]);
-                                por.setMinLoc(new Location(Bukkit.getWorld(p[4]), Double.parseDouble(p[5]), Double.parseDouble(p[6]), Double.parseDouble(p[7])));
-                                por.setMaxLoc(new Location(Bukkit.getWorld(p[4]), Double.parseDouble(p[8]), Double.parseDouble(p[9]), Double.parseDouble(p[10])));
+                                        // Bind new values
+                                        portal.setName(p[0]);
+                                        portal.setType(p[1]);
+                                        portal.setDestination(p[2]);
+                                        portal.setFillType(p[3]);
+                                        portal.setMinLoc(new Location(Bukkit.getWorld(p[4]), Double.parseDouble(p[5]), Double.parseDouble(p[6]), Double.parseDouble(p[7])));
+                                        portal.setMaxLoc(new Location(Bukkit.getWorld(p[4]), Double.parseDouble(p[8]), Double.parseDouble(p[9]), Double.parseDouble(p[10])));
 
-                                // Save the updated one to list
-                                PortalManager.portals.get(Bukkit.getWorld(p[4])).add(por);
+                                        // Save the updated one to list
+                                        PortalManager.portals.get(plugin.getServer().getWorld(p[4])).add(portal);
+                                        return;
+                                    }
+                                }
+
                             }
+
                         } else {
                             // Create portal from values
-                            Portal portal = new Portal(p[0], p[1], p[2], p[3], new Location(Bukkit.getWorld(p[4]), Double.parseDouble(p[5]), Double.parseDouble(p[6]), Double.parseDouble(p[7])), new Location(Bukkit.getWorld(p[4]), Double.parseDouble(p[8]), Double.parseDouble(p[9]), Double.parseDouble(p[10])));
+                            portal = new Portal(p[0], p[1], p[2], p[3],
+                                    new Location(Bukkit.getWorld(p[4]), Double.parseDouble(p[5]), Double.parseDouble(p[6]), Double.parseDouble(p[7])),
+                                    new Location(Bukkit.getWorld(p[4]), Double.parseDouble(p[8]), Double.parseDouble(p[9]), Double.parseDouble(p[10])));
 
                             // Save the updated one to list
-                            PortalManager.portals.get(Bukkit.getWorld(p[4])).add(portal);
+                            PortalManager.portals.get(plugin.getServer().getWorld(p[4])).add(portal);
+                            PortalManager.portalNames.add(p[0]);
                         }
-                        // Add portal name to list
-                        PortalManager.portalNames.add(p[0]);
-
-                        // Refresh portals
-                        PortalManager.loadPortals();
+                        if (portal != null) {
+                            portal.fillPortal();
+                        }
                     } else {
                         // Return warning message
                         System.out.println("[MaSuite] [Portals] [Portal=" + p[0] + "] [World=" + p[4] + "] World not found");
@@ -81,9 +91,14 @@ public class PortalsMessageListener implements PluginMessageListener {
                     //Check if list contains the name
                     if (PortalManager.portalNames.contains(p)) {
                         // Load portal
-                        Portal por = PortalManager.portals.values().stream().map(portals1 -> portals1.stream().filter(portal -> portal.getName().equalsIgnoreCase(p)).findFirst().get()).findFirst().get();
-                        // Remove it
-                        PortalManager.removePortal(por);
+                        for (List<Portal> portals : PortalManager.portals.values()) {
+                            for (Portal portal : portals) {
+                                if (portal.getName().equalsIgnoreCase(p)) {
+                                    PortalManager.removePortal(portal);
+                                    return;
+                                }
+                            }
+                        }
                     }
                 }
             }

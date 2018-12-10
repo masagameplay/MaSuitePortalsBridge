@@ -36,7 +36,7 @@ public final class MaSuitePortalsBridge extends JavaPlugin implements Listener {
         registerCommands();
         registerListener();
         initLists();
-        reguestPortals();
+        //reguestPortals();
 
 
         // Create configs
@@ -85,7 +85,7 @@ public final class MaSuitePortalsBridge extends JavaPlugin implements Listener {
              DataOutputStream out = new DataOutputStream(b)) {
             out.writeUTF("MaSuitePortals");
             out.writeUTF("RequestPortals");
-            getServer().getScheduler().runTaskTimerAsynchronously(this, () -> getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray()), 0, 30000);
+            getServer().getScheduler().runTaskTimerAsynchronously(this, () -> getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray()), 0, 5000);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,7 +99,7 @@ public final class MaSuitePortalsBridge extends JavaPlugin implements Listener {
                  DataOutputStream out = new DataOutputStream(b)) {
                 out.writeUTF("MaSuitePortals");
                 out.writeUTF("RequestPortals");
-                getServer().getScheduler().runTaskLater(this, () -> e.getPlayer().sendPluginMessage(this, "BungeeCord", b.toByteArray()), 100);
+                getServer().getScheduler().runTaskLaterAsynchronously(this, () -> e.getPlayer().sendPluginMessage(this, "BungeeCord", b.toByteArray()), 100);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
