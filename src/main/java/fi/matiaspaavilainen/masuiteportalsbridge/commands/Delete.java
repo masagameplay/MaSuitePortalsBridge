@@ -1,9 +1,6 @@
 package fi.matiaspaavilainen.masuiteportalsbridge.commands;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import fi.matiaspaavilainen.masuiteportalsbridge.MaSuitePortalsBridge;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
